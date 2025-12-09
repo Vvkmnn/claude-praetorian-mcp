@@ -201,13 +201,25 @@ export class Storage {
       updated: compaction.updated,
     };
 
-    // Update word index
+    // Update word index - include all searchable fields
+    const techniquesText = compaction.techniques
+      ? Object.entries(compaction.techniques).flat().join(" ")
+      : "";
+    const decisionsText = compaction.decisions
+      ? compaction.decisions.map((d) => `${d.chose} ${d.reason}`).join(" ")
+      : "";
+
     const text = [
       compaction.title,
       compaction.source || "",
       ...(compaction.key_insights || []),
       ...(compaction.findings || []),
       ...(compaction.refs || []),
+      ...(compaction.anti_patterns || []),
+      ...(compaction.recommendations || []),
+      ...(compaction.next || []),
+      techniquesText,
+      decisionsText,
     ].join(" ");
 
     const words = this.tokenize(text);

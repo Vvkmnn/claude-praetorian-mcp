@@ -1,25 +1,16 @@
 # claude-praetorian-mcp
 
-> **❌ under construction:** This project is under heavy construction and is not intended for public use / nor has it been published to npm. Information in the README below may be outdated, user discretion is advised.
+![claude-historian-mcp](demo.gif)
 
-<!-- TODO: Add demo.gif -->
+<!-- > **❌ under construction:** This project is under heavy construction and is not intended for public use / nor has it been published to npm. Information in the README below may be outdated, user discretion is advised. -->
 
 A [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server for aggressive context compaction in [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Save 90%+ tokens by compacting web research, task outputs, and conversations into beautiful, structured snapshots.
 
-Inspired by:
+[![npm version](https://img.shields.io/npm/v/claude-praetorian-mcp.svg)](https://www.npmjs.com/package/claude-praetorian-mcp) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org/) [![GitHub stars](https://img.shields.io/github/stars/Vvkmnn/claude-praetorian-mcp?style=social)](https://github.com/Vvkmnn/claude-praetorian-mcp) [![Claude](https://img.shields.io/badge/Claude-D97757?logo=claude&logoColor=fff)](#)
 
-- [ACE: Advanced Context Engineering for Coding Agents](https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/ace-fca.md) - Context is the ONLY lever
-- [12-Factor Agents](https://github.com/humanlayer/12-factor-agents) - Own your prompts, own your context
-- [HumanLayer](https://github.com/humanlayer/humanlayer) - Human-in-the-loop for AI agents
-- [TOON Format](https://toonformat.dev) - Token-Oriented Object Notation (30-60% savings)
-- [MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk) - Model Context Protocol
+<!-- TODO: Add demo.gif -->
 
-[![npm version](https://img.shields.io/npm/v/claude-praetorian-mcp.svg)](https://www.npmjs.com/package/claude-praetorian-mcp)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org/)
-[![GitHub stars](https://img.shields.io/github/stars/Vvkmnn/claude-praetorian-mcp?style=social)](https://github.com/Vvkmnn/claude-praetorian-mcp)
-[![Claude](https://img.shields.io/badge/Claude-D97757?logo=claude&logoColor=fff)](#)
+Inspired by [this talk](https://www.youtube.com/watch?v=rmvDxxNubIg) by [Dexter Horthy](https://x.com/dexhorthy) from [HumanLayer](http://humanlayer.dev), and his team's work on [ACE: Advanced Context Engineering for Coding Agents](https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/ace-fca.md), [12-Factor Agents](https://github.com/humanlayer/12-factor-agents) & the recent release of the [`TOON` (Token-Oriented Object Notation) Format](https://toonformat.dev).
 
 ## install
 
@@ -59,26 +50,17 @@ Install this mcp: https://github.com/Vvkmnn/claude-praetorian-mcp
 }
 ```
 
-**No setup required** - zero config files, zero databases, works with `bunx` out of the box.
-
-## token savings
-
-| What You Save          | Before       | After       | Savings |
-| ---------------------- | ------------ | ----------- | ------- |
-| WebFetch (docs)        | ~1500 tokens | ~100 tokens | **93%** |
-| Task/subagent output   | ~2000 tokens | ~150 tokens | **92%** |
-| File exploration       | ~3000 tokens | ~200 tokens | **93%** |
-| Conversation decisions | ~5000 tokens | ~300 tokens | **94%** |
-
-**Average: 10-20x token reduction on reuse**
+<!-- **No setup required** - zero config files, zero databases, works with `bunx` out of the box. -->
 
 ## features
 
-[MCP server](https://modelcontextprotocol.io/) for aggressive context compaction. Structured snapshots with 90%+ token savings.
+[MCP server](https://modelcontextprotocol.io/) for aggressive context compaction. Generates **structured incremental snapshots** to yield 90%+ token savings and easily refresh context with ["frequent intentional compaction"](https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/ace-fca.md#slightly-smarter-intentional-compaction).
 
-Runs locally (with royal guard `⚜️`):
+Currently runs project by project and saves artifacts to `{$project}/.claude/praetorian` via the following tools (and a royal guard `⚜️`):
 
 ### praetorian_compact
+
+(Incrementally) compact context using the TOON format to get the most valuable tokens from an activity.
 
 ```
 ⚜️ praetorian_compact type=<type> title=<title>
@@ -109,6 +91,8 @@ Runs locally (with royal guard `⚜️`):
 ```
 
 ### praetorian_restore
+
+Search and restore context by injecting TOON tokens back into current context as needed.
 
 ```
 ⚜️ praetorian_restore query=<query>
@@ -172,6 +156,7 @@ Next session: `restore()` loads ~1,000 tokens. Instant resume, no re-research.
 
 How [claude-praetorian-mcp](https://github.com/Vvkmnn/claude-praetorian-mcp) [works](https://github.com/Vvkmnn/claude-praetorian-mcp/tree/master/src):
 
+<!-- Original ASCII diagram preserved for reference
 ```
 "ACE Framework" compaction
       |
@@ -200,6 +185,41 @@ How [claude-praetorian-mcp](https://github.com/Vvkmnn/claude-praetorian-mcp) [wo
           • Status word on top-right (Created/Merged/Search/Recent)
           • Token savings prominently displayed
 ```
+-->
+
+```
+                        claude-praetorian-mcp
+              ======================================
+
+
+  praetorian_compact (write)
+  --------------------------
+
+  INPUT ──> VALIDATE ──> DETECT ──> MERGE ──> ENCODE ──> INDEX ──> OUTPUT
+              │            │          │         │          │
+              │            │          │         │          └─ words -> IDs
+              │            │          │         └─ .toon (30-60% smaller)
+              │            │          └─ dedupe arrays, combine objects
+              │            └─ Jaccard similarity > 70% = auto-merge
+              └─ Zod schemas (CompactInput, Compaction)
+
+
+  praetorian_restore (read)
+  -------------------------
+
+                      ┌─────────┐
+  QUERY ──> SEARCH ───┤         ├──> DECODE ──> OUTPUT
+                      │  INDEX  │
+  (none) ──> RECENT ──┤         │
+                      └─────────┘
+
+
+  Storage: .claude/praetorian/
+  ----------------------------
+
+  index.json          Inverted word index + compaction metadata
+  compactions/*.toon  TOON-encoded compaction files
+```
 
 **Core optimizations:**
 
@@ -212,8 +232,8 @@ How [claude-praetorian-mcp](https://github.com/Vvkmnn/claude-praetorian-mcp) [wo
 **File access:**
 
 - Stores in: `<project>/.claude/praetorian/`
-- TOON format: `.toon` files (30-60% smaller than YAML)
-- Zero database dependencies (pure filesystem)
+- TOON format: `.toon` files (40% fewer bytes than YAML/XML)
+- Zero database dependencies (no db calls or filesystem)
 - Never leaves your machine
 
 ## development
@@ -251,5 +271,4 @@ node dist/index.js     # Run MCP server directly (stdio)
 ---
 
 ![Emperor Claudius](https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Claudius_crop.jpg/500px-Claudius_crop.jpg)
-
 _Tiberius Claudius Caesar Augustus Germanicus - Declared emperor by his Praetorian Guard_

@@ -1,10 +1,10 @@
 {
   "name": "claude-praetorian-mcp",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Aggressive context compaction MCP server for Claude Code - save and retrieve structured snapshots with 90%+ token savings",
   "type": "module",
   "bin": {
-    "claude-praetorian-mcp": "./dist/index.js"
+    "claude-praetorian-mcp": "dist/index.js"
   },
   "files": [
     "dist"
@@ -21,8 +21,16 @@
     "compaction",
     "token-optimization"
   ],
-  "author": "",
+  "author": "Vvkmnn",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vvkmnn/claude-praetorian-mcp.git"
+  },
+  "homepage": "https://github.com/Vvkmnn/claude-praetorian-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/Vvkmnn/claude-praetorian-mcp/issues"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.4",
     "@toon-format/toon": "^2.1.0",
