@@ -52,6 +52,23 @@ Install this mcp: https://github.com/Vvkmnn/claude-praetorian-mcp
 
 <!-- **No setup required** - zero config files, zero databases, works with `bunx` out of the box. -->
 
+## skill
+
+Optionally, install the skill to teach Claude when to proactively use praetorian:
+
+```bash
+npx skills add Vvkmnn/claude-praetorian-mcp --skill claude-praetorian --global
+```
+
+## plugin
+
+For full automation with hooks, install the plugin from [claude-agora](https://github.com/Vvkmnn/claude-agora):
+
+```bash
+/plugin marketplace add Vvkmnn/claude-agora
+/plugin install claude-praetorian@claude-agora
+```
+
 ## features
 
 [MCP server](https://modelcontextprotocol.io/) for aggressive context compaction. Generates **structured incremental snapshots** to yield 90%+ token savings and easily refresh context with ["frequent intentional compaction"](https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/ace-fca.md#slightly-smarter-intentional-compaction).

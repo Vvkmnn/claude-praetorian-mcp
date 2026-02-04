@@ -22,6 +22,7 @@ Thumbs.db
 
 # Test data
 .claude/
+!.claude/skills/
 
 # Asciinema 
 *.cast

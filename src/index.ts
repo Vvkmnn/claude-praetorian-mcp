@@ -12,6 +12,21 @@ import { restore, restoreToolDefinition } from "./tools/restore.js";
 import { formatBorderedBox } from "./utils/formatting.js";
 import type { CompactInput, RestoreInput } from "./types.js";
 
+// Package version
+const PKG_VERSION = "1.1.0";
+
+// MCP instructions
+function getInstructions(): string {
+  return `⚜️ Praetorian - Context Compaction
+
+Save valuable context across sessions:
+• praetorian_restore(query) - Load past work
+• praetorian_compact(type, title, ...) - Save insights
+
+Types: web_research, task_result, file_reads, decisions
+Auto-merges similar titles. Compact freely.`;
+}
+
 // Initialize storage
 const storage = new Storage();
 
@@ -19,12 +34,13 @@ const storage = new Storage();
 const server = new Server(
   {
     name: "claude-praetorian-mcp",
-    version: "0.1.0",
+    version: PKG_VERSION,
   },
   {
     capabilities: {
       tools: {},
     },
+    instructions: getInstructions(),
   }
 );
 
