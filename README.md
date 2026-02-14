@@ -1,6 +1,6 @@
 # claude-praetorian-mcp
 
-![claude-historian-mcp](demo.gif)
+![claude-praetorian-mcp](demo.gif)
 
 <!-- > **❌ under construction:** This project is under heavy construction and is not intended for public use / nor has it been published to npm. Information in the README below may be outdated, user discretion is advised. -->
 
@@ -58,15 +58,16 @@ Optionally, install the skill to teach Claude when to proactively use praetorian
 
 ```bash
 npx skills add Vvkmnn/claude-praetorian-mcp --skill claude-praetorian --global
+# Optional: add --yes to skip interactive prompt and install to all agents
 ```
 
 ## plugin
 
-For full automation with hooks, install the plugin from [claude-agora](https://github.com/Vvkmnn/claude-agora):
+For full automation with hooks, install the plugin from [claude-emporium](https://github.com/Vvkmnn/claude-emporium):
 
 ```bash
-/plugin marketplace add Vvkmnn/claude-agora
-/plugin install claude-praetorian@claude-agora
+/plugin marketplace add Vvkmnn/claude-emporium
+/plugin install claude-praetorian@claude-emporium
 ```
 
 ## features
@@ -205,37 +206,49 @@ How [claude-praetorian-mcp](https://github.com/Vvkmnn/claude-praetorian-mcp) [wo
 -->
 
 ```
-                        claude-praetorian-mcp
-              ======================================
+              ⚜️  claude-praetorian-mcp
+              ════════════════════════
 
 
-  praetorian_compact (write)
-  --------------------------
+        compact (save)          restore (load)
+        ──────────────          ──────────────
 
-  INPUT ──> VALIDATE ──> DETECT ──> MERGE ──> ENCODE ──> INDEX ──> OUTPUT
-              │            │          │         │          │
-              │            │          │         │          └─ words -> IDs
-              │            │          │         └─ .toon (30-60% smaller)
-              │            │          └─ dedupe arrays, combine objects
-              │            └─ Jaccard similarity > 70% = auto-merge
-              └─ Zod schemas (CompactInput, Compaction)
+            INPUT                   QUERY
+              │                       │
+              ▼                       ▼
+          ┌───────┐             ┌─────────┐
+          │ Zod   │             │ Inverted│
+          │Validate│             │  Index  │
+          └───┬───┘             └────┬────┘
+              │                      │
+              ▼                      ▼
+          ┌───────┐             ┌────────┐
+          │Jaccard│             │  TOON  │
+          │>70% ? │             │ Decode │
+          └──┬──┬─┘             └────┬───┘
+             │  │                    │
+          new│  │match               ▼
+             │  │                 OUTPUT
+             ▼  ▼
+          ┌───────┐
+          │ TOON  │
+          │Encode │
+          └───┬───┘
+              │
+              ▼
+          ┌───────┐
+          │ Index │
+          │Update │
+          └───┬───┘
+              │
+              ▼
+           OUTPUT
 
 
-  praetorian_restore (read)
-  -------------------------
-
-                      ┌─────────┐
-  QUERY ──> SEARCH ───┤         ├──> DECODE ──> OUTPUT
-                      │  INDEX  │
-  (none) ──> RECENT ──┤         │
-                      └─────────┘
-
-
-  Storage: .claude/praetorian/
-  ----------------------------
-
-  index.json          Inverted word index + compaction metadata
-  compactions/*.toon  TOON-encoded compaction files
+        storage: .claude/praetorian/
+        ────────────────────────────
+        index.json            word index + metadata
+        compactions/*.toon    encoded compaction files
 ```
 
 **Core optimizations:**
@@ -250,7 +263,7 @@ How [claude-praetorian-mcp](https://github.com/Vvkmnn/claude-praetorian-mcp) [wo
 
 - Stores in: `<project>/.claude/praetorian/`
 - TOON format: `.toon` files (40% fewer bytes than YAML/XML)
-- Zero database dependencies (no db calls or filesystem)
+- Zero database dependencies (flat files only, no external services)
 - Never leaves your machine
 
 ## development

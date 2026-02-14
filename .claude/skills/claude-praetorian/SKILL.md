@@ -52,11 +52,11 @@ Auto-merges similar titles. Compact freely.
 
 ## Full Automation
 
-For automatic hooks that prompt at key moments, install the plugin from claude-agora:
+For automatic hooks that prompt at key moments, install the plugin from claude-emporium:
 
 ```bash
-/plugin marketplace add Vvkmnn/claude-agora
-/plugin install claude-praetorian@claude-agora
+/plugin marketplace add Vvkmnn/claude-emporium
+/plugin install claude-praetorian@claude-emporium
 ```
 
 This adds hooks for SessionStart, PreCompact, PostToolUse, and Stop.
