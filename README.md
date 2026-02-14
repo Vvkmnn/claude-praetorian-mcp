@@ -6,7 +6,7 @@
 
 A [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server for aggressive context compaction in [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Save 90%+ tokens by compacting web research, task outputs, and conversations into beautiful, structured snapshots.
 
-[![npm version](https://img.shields.io/npm/v/claude-praetorian-mcp.svg)](https://www.npmjs.com/package/claude-praetorian-mcp) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org/) [![GitHub stars](https://img.shields.io/github/stars/Vvkmnn/claude-praetorian-mcp?style=social)](https://github.com/Vvkmnn/claude-praetorian-mcp) [![Claude](https://img.shields.io/badge/Claude-D97757?logo=claude&logoColor=fff)](#)
+[![npm version](https://img.shields.io/npm/v/claude-praetorian-mcp.svg)](https://www.npmjs.com/package/claude-praetorian-mcp) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org/) [![Claude](https://img.shields.io/badge/Claude-D97757?logo=claude&logoColor=fff)](#) [![GitHub stars](https://img.shields.io/github/stars/Vvkmnn/claude-praetorian-mcp?style=social)](https://github.com/Vvkmnn/claude-praetorian-mcp)
 
 <!-- TODO: Add demo.gif -->
 
@@ -216,33 +216,33 @@ How [claude-praetorian-mcp](https://github.com/Vvkmnn/claude-praetorian-mcp) [wo
             INPUT                   QUERY
               │                       │
               ▼                       ▼
-          ┌───────┐             ┌─────────┐
-          │ Zod   │             │ Inverted│
-          │Validate│             │  Index  │
-          └───┬───┘             └────┬────┘
-              │                      │
-              ▼                      ▼
-          ┌───────┐             ┌────────┐
-          │Jaccard│             │  TOON  │
-          │>70% ? │             │ Decode │
-          └──┬──┬─┘             └────┬───┘
-             │  │                    │
-          new│  │match               ▼
-             │  │                 OUTPUT
-             ▼  ▼
-          ┌───────┐
-          │ TOON  │
-          │Encode │
-          └───┬───┘
-              │
-              ▼
-          ┌───────┐
-          │ Index │
-          │Update │
-          └───┬───┘
-              │
-              ▼
-           OUTPUT
+          ┌─────────┐           ┌─────────┐
+          │   Zod   │           │ Inverted│
+          │Validate │           │  Index  │
+          └────┬────┘           └────┬────┘
+               │                     │
+               ▼                     ▼
+          ┌─────────┐           ┌─────────┐
+          │ Jaccard │           │  TOON   │
+          │ >70% ?  │           │ Decode  │
+          └──┬───┬──┘           └────┬────┘
+             │   │                   │
+          new│   │match              ▼
+             │   │                OUTPUT
+             ▼   ▼
+          ┌─────────┐
+          │  TOON   │
+          │ Encode  │
+          └────┬────┘
+               │
+               ▼
+          ┌─────────┐
+          │  Index  │
+          │ Update  │
+          └────┬────┘
+               │
+               ▼
+            OUTPUT
 
 
         storage: .claude/praetorian/
@@ -301,4 +301,5 @@ node dist/index.js     # Run MCP server directly (stdio)
 ---
 
 ![Emperor Claudius](https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Claudius_crop.jpg/500px-Claudius_crop.jpg)
+
 _Tiberius Claudius Caesar Augustus Germanicus - Declared emperor by his Praetorian Guard_
