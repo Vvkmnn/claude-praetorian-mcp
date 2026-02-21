@@ -1,0 +1,58 @@
+# Source files
+src/
+tsconfig.json
+
+# Development files
+.github/
+.git/
+.gitignore
+.husky/
+node_modules/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Testing
+test/
+tests/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+coverage/
+.nyc_output/
+
+# Build artifacts not needed
+*.tsbuildinfo
+
+# Documentation (except README)
+docs/
+analysis/
+*.md
+!README.md
+
+# Local development
+.env
+.env.local
+.env.*.local
+.claude/
+.mcp.json
+
+# Dev artifacts
+*.cast
+demo/
+*.tgz
+*.png
+plugin/

@@ -1,48 +1,46 @@
+<img align="right" src="claude-praetorian.svg" alt="claude-praetorian-mcp" width="220">
+
 # claude-praetorian-mcp
 
-![claude-praetorian-mcp](demo.gif)
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server for aggressive context compaction in [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Save 90%+ tokens by compacting web research, task outputs, and conversations into structured snapshots.
 
-<!-- > **❌ under construction:** This project is under heavy construction and is not intended for public use / nor has it been published to npm. Information in the README below may be outdated, user discretion is advised. -->
+<br clear="right">
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server for aggressive context compaction in [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Save 90%+ tokens by compacting web research, task outputs, and conversations into beautiful, structured snapshots.
+![claude-praetorian-mcp](demo/demo.gif)
 
 [![npm version](https://img.shields.io/npm/v/claude-praetorian-mcp.svg)](https://www.npmjs.com/package/claude-praetorian-mcp) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![Node.js](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org/) [![Claude](https://img.shields.io/badge/Claude-D97757?logo=claude&logoColor=fff)](#) [![GitHub stars](https://img.shields.io/github/stars/Vvkmnn/claude-praetorian-mcp?style=social)](https://github.com/Vvkmnn/claude-praetorian-mcp)
 
-<!-- TODO: Add demo.gif -->
+---
 
-Inspired by [this talk](https://www.youtube.com/watch?v=rmvDxxNubIg) by [Dexter Horthy](https://x.com/dexhorthy) from [HumanLayer](http://humanlayer.dev), and his team's work on [ACE: Advanced Context Engineering for Coding Agents](https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/ace-fca.md), [12-Factor Agents](https://github.com/humanlayer/12-factor-agents) & the recent release of the [`TOON` (Token-Oriented Object Notation) Format](https://toonformat.dev).
+Inspired by [this talk](https://www.youtube.com/watch?v=rmvDxxNubIg) by [Dexter Horthy](https://x.com/dexhorthy) from [HumanLayer](http://humanlayer.dev), and his team's work on [ACE: Advanced Context Engineering for Coding Agents](https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/ace-fca.md), [12-Factor Agents](https://github.com/humanlayer/12-factor-agents) & the [`TOON` (Token-Oriented Object Notation) Format](https://toonformat.dev).
 
 ## install
 
-Requirements:
+**Requirements:**
 
-- [Claude Code](https://claude.ai/code)
-
-```bash
-npm install -g claude-praetorian-mcp
-```
+[![Claude Code](https://img.shields.io/badge/Claude_Code-555?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOCAxMCIgc2hhcGUtcmVuZGVyaW5nPSJjcmlzcEVkZ2VzIj4KICA8IS0tIENsYXdkOiBDbGF1ZGUgQ29kZSBtYXNjb3QgLS0+CiAgPCEtLSBEZWNvZGVkIGZyb206IOKWkOKWm+KWiOKWiOKWiOKWnOKWjCAvIOKWneKWnOKWiOKWiOKWiOKWiOKWiOKWm+KWmCAvIOKWmOKWmCDilp3ilp0gLS0+CiAgPCEtLSBTdWItcGl4ZWxzIGFyZSAxIHdpZGUgeCAyIHRhbGwgdG8gbWF0Y2ggdGVybWluYWwgY2hhciBjZWxsIGFzcGVjdCByYXRpbyAtLT4KICA8cmVjdCBmaWxsPSIjZDk3NzU3IiB4PSIzIiAgeT0iMCIgd2lkdGg9IjEyIiBoZWlnaHQ9IjIiLz4KICA8cmVjdCBmaWxsPSIjZDk3NzU3IiB4PSIzIiAgeT0iMiIgd2lkdGg9IjIiICBoZWlnaHQ9IjIiLz4KICA8cmVjdCBmaWxsPSIjZDk3NzU3IiB4PSI2IiAgeT0iMiIgd2lkdGg9IjYiICBoZWlnaHQ9IjIiLz4KICA8cmVjdCBmaWxsPSIjZDk3NzU3IiB4PSIxMyIgeT0iMiIgd2lkdGg9IjIiICBoZWlnaHQ9IjIiLz4KICA8cmVjdCBmaWxsPSIjZDk3NzU3IiB4PSIxIiAgeT0iNCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjIiLz4KICA8cmVjdCBmaWxsPSIjZDk3NzU3IiB4PSIzIiAgeT0iNiIgd2lkdGg9IjEyIiBoZWlnaHQ9IjIiLz4KICA8cmVjdCBmaWxsPSIjZDk3NzU3IiB4PSI0IiAgeT0iOCIgd2lkdGg9IjEiICBoZWlnaHQ9IjIiLz4KICA8cmVjdCBmaWxsPSIjZDk3NzU3IiB4PSI2IiAgeT0iOCIgd2lkdGg9IjEiICBoZWlnaHQ9IjIiLz4KICA8cmVjdCBmaWxsPSIjZDk3NzU3IiB4PSIxMSIgeT0iOCIgd2lkdGg9IjEiICBoZWlnaHQ9IjIiLz4KICA8cmVjdCBmaWxsPSIjZDk3NzU3IiB4PSIxMyIgeT0iOCIgd2lkdGg9IjEiICBoZWlnaHQ9IjIiLz4KPC9zdmc+Cg==)](https://claude.ai/code)
 
 **From shell:**
 
 ```bash
-claude mcp add claude-praetorian-mcp -- bunx claude-praetorian-mcp
+claude mcp add claude-praetorian-mcp -- npx claude-praetorian-mcp
 ```
 
 **From inside Claude** (restart required):
 
 ```
-Add this to our global mcp config: bunx claude-praetorian-mcp
+Add this to our global mcp config: npx claude-praetorian-mcp
 
 Install this mcp: https://github.com/Vvkmnn/claude-praetorian-mcp
 ```
 
-**From any manually configurable `mcp.json`:** (Cursor, Windsurf, etc.)
+**From any manually configurable `mcp.json`**: (Cursor, Windsurf, etc.)
 
 ```json
 {
   "mcpServers": {
     "praetorian": {
-      "command": "bunx",
+      "command": "npx",
       "args": ["claude-praetorian-mcp"],
       "env": {}
     }
@@ -50,7 +48,13 @@ Install this mcp: https://github.com/Vvkmnn/claude-praetorian-mcp
 }
 ```
 
-<!-- **No setup required** - zero config files, zero databases, works with `bunx` out of the box. -->
+That's it; there is **no `npm install` required** as there are no external databases or services, only flat files.
+
+However, in the unlikely event that you pull the wrong package / `npx` registry is out of date, you can force resolution with:
+
+```bash
+npm install -g claude-praetorian-mcp
+```
 
 ## skill
 
@@ -61,22 +65,37 @@ npx skills add Vvkmnn/claude-praetorian-mcp --skill claude-praetorian --global
 # Optional: add --yes to skip interactive prompt and install to all agents
 ```
 
+This makes Claude automatically compact after research, subagent tasks, and before context resets. The MCP works without the skill, but the skill improves discoverability.
+
 ## plugin
 
-For full automation with hooks, install the plugin from [claude-emporium](https://github.com/Vvkmnn/claude-emporium):
+For full automation with hooks, install from the [claude-emporium](https://github.com/Vvkmnn/claude-emporium) marketplace:
 
 ```bash
 /plugin marketplace add Vvkmnn/claude-emporium
 /plugin install claude-praetorian@claude-emporium
 ```
 
+The **claude-praetorian** plugin provides:
+
+**Hooks** (targeted, fires only at high-value moments):
+
+- Before EnterPlanMode → Restore prior compactions for this project
+- Before context compaction → Save decisions/insights before context resets
+- After WebFetch/WebSearch → Compact web research findings
+- After SubagentStop → Compact subagent task results
+
+**Commands:** `/praetorian-compact`, `/praetorian-restore`, `/praetorian-search`
+
+Requires the MCP server installed first. See the emporium for other Claude Code plugins and MCPs.
+
 ## features
 
 [MCP server](https://modelcontextprotocol.io/) for aggressive context compaction. Generates **structured incremental snapshots** to yield 90%+ token savings and easily refresh context with ["frequent intentional compaction"](https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/ace-fca.md#slightly-smarter-intentional-compaction).
 
-Currently runs project by project and saves artifacts to `{$project}/.claude/praetorian` via the following tools (and a royal guard `⚜️`):
+Runs project by project, saves artifacts to `{$project}/.claude/praetorian` (with a royal guard `⚜️`):
 
-### praetorian_compact
+#### `praetorian_compact`
 
 (Incrementally) compact context using the TOON format to get the most valuable tokens from an activity.
 
@@ -98,6 +117,21 @@ Currently runs project by project and saves artifacts to `{$project}/.claude/pra
 └───────────────────────────────────────────────────────────────────┘
 ```
 
+```json
+{
+  "type": "web_research",
+  "title": "ACE Framework Research",
+  "source": "https://github.com/humanlayer/ace-fca",
+  "key_insights": [
+    "Frequent intentional compaction saves 90%+ tokens",
+    "TOON format is 30-60% smaller than JSON/YAML",
+    "Compaction should happen after every expensive operation"
+  ],
+  "refs": ["ace-fca.md:42 - compaction strategy", "toon-spec.md:1 - format definition"],
+  "recommendations": ["Compact after every WebFetch", "Use type='decisions' for architecture choices"]
+}
+```
+
 ```
 ⚜️ compact | Merged
 
@@ -108,7 +142,20 @@ Currently runs project by project and saves artifacts to `{$project}/.claude/pra
 └────────────────────────────────────────────────────────────────────┘
 ```
 
-### praetorian_restore
+```json
+{
+  "type": "decisions",
+  "title": "Authentication Patterns",
+  "decisions": [
+    { "chose": "JWT with refresh tokens", "over": ["sessions", "API keys"], "reason": "Stateless, works across microservices" },
+    { "chose": "httpOnly cookies", "over": ["localStorage"], "reason": "XSS protection" }
+  ],
+  "refs": ["src/middleware/auth.ts:45 - token validation", "src/routes/login.ts:23 - refresh flow"],
+  "anti_patterns": ["Never store tokens in localStorage", "Never skip CSRF on cookie-based auth"]
+}
+```
+
+#### `praetorian_restore`
 
 Search and restore context by injecting TOON tokens back into current context as needed.
 
@@ -130,6 +177,29 @@ Search and restore context by injecting TOON tokens back into current context as
 └────────────────────────────────────────────────────────────────────┘
 ```
 
+```json
+{
+  "compactions": [
+    {
+      "id": "cpt_1765245903512_xk9mp1",
+      "type": "decisions",
+      "title": "Authentication Patterns",
+      "relevance": 0.85,
+      "key_insights": ["JWT with refresh tokens", "httpOnly cookies for XSS protection"],
+      "refs": ["src/middleware/auth.ts:45", "src/routes/login.ts:23"]
+    },
+    {
+      "id": "cpt_1765245902396_nxetoc",
+      "type": "web_research",
+      "title": "OAuth2 Best Practices",
+      "relevance": 0.72,
+      "key_insights": ["PKCE flow for public clients", "Token rotation every 15min"]
+    }
+  ],
+  "total": 2
+}
+```
+
 ```
 ⚜️ restore | Recent
 
@@ -141,22 +211,20 @@ Search and restore context by injecting TOON tokens back into current context as
 **Status indicators:**
 
 - **Created** - New compaction saved
-- **Merged** - Updated existing compaction (>70% title similarity)
+- **Merged** - Updated existing compaction (>70% title similarity via [Jaccard index](https://en.wikipedia.org/wiki/Jaccard_index))
 - **Search** - Search results returned (keyword matching)
 - **Recent** - Recent compactions listed (by updated time)
-
-## usage
 
 Praetorian is designed for **heavy, frequent use**. The more you compact, the more you save.
 
 **When to compact:**
 
-- ✅ After every WebFetch
-- ✅ After every Task/subagent completes
-- ✅ After reading multiple files
-- ✅ After making decisions
-- ✅ During long conversations (proactive compaction)
-- ✅ Before context gets >60% full
+- [x] After every WebFetch
+- [x] After every Task/subagent completes
+- [x] After reading multiple files
+- [x] After making decisions
+- [x] During long conversations (proactive compaction)
+- [x] Before context gets >60% full
 
 **Real-world example session:**
 
@@ -173,37 +241,6 @@ Next session: `restore()` loads ~1,000 tokens. Instant resume, no re-research.
 ## methodology
 
 How [claude-praetorian-mcp](https://github.com/Vvkmnn/claude-praetorian-mcp) [works](https://github.com/Vvkmnn/claude-praetorian-mcp/tree/master/src):
-
-<!-- Original ASCII diagram preserved for reference
-```
-"ACE Framework" compaction
-      |
-      ├─> Input Validation (schemas.ts): Zod runtime validation
-      |   • CompactionSchema validates all loaded .toon files
-      |   • CompactInputSchema validates requests before processing
-      |   • SearchIndexSchema ensures index integrity
-      |
-      ├─> Similarity Detection (storage/index.ts:48): Jaccard similarity
-      |   • Tokenize titles into word sets (lowercase, >2 chars)
-      |   • Calculate intersection/union ratio (Set operations)
-      |   • >70% similarity = auto-merge with existing
-      |
-      ├─> TOON Encoding (storage/index.ts:162): Token-Oriented Object Notation
-      |   • 30-60% fewer tokens than YAML/JSON
-      |   • Schema-aware with explicit array counts [3]
-      |   • Lossless JSON conversion (decode → validate → encode)
-      |
-      ├─> Smart Merging (storage/index.ts:74): Intelligent content combination
-      |   • Arrays: Append unique items (Set deduplication)
-      |   • Objects: Merge keys, update values (spread operator)
-      |   • Decisions: Append to history (chronological order)
-      |
-      └─> Border Formatting (utils/formatting.ts): Senator-style output
-          • Single-line box drawing with ⚜️ emoji (top-left)
-          • Status word on top-right (Created/Merged/Search/Recent)
-          • Token savings prominently displayed
-```
--->
 
 ```
               ⚜️  claude-praetorian-mcp
@@ -271,35 +308,52 @@ How [claude-praetorian-mcp](https://github.com/Vvkmnn/claude-praetorian-mcp) [wo
 ```bash
 git clone https://github.com/Vvkmnn/claude-praetorian-mcp && cd claude-praetorian-mcp
 npm install && npm run build
+npm test
 ```
 
 **Package requirements:**
 
 - **Node.js**: >=20.0.0 (ES modules)
-- **npm**: >=10.0.0 (package-lock v3)
 - **Runtime**: `@modelcontextprotocol/sdk`, `@toon-format/toon`, `zod`
-- **Zero external databases** - works with `bunx`
+- **Zero external databases** — works with `npx`
 
 **Development workflow:**
 
 ```bash
-npm run build          # TypeScript compilation
-npm run watch          # Watch mode with tsc --watch
-node dist/index.js     # Run MCP server directly (stdio)
+npm run build          # TypeScript compilation with executable permissions
+npm run dev            # Watch mode with tsc --watch
+npm run start          # Run the MCP server directly
+npm run lint           # ESLint code quality checks
+npm run lint:fix       # Auto-fix linting issues
+npm run format         # Prettier formatting (src/)
+npm run format:check   # Check formatting without changes
+npm run typecheck      # TypeScript validation without emit
+npm run test           # Lint + type check
+npm run prepublishOnly # Pre-publish validation (build + lint + format:check)
 ```
 
-**Contributing:**
+**Git hooks (via Husky):**
+
+- **pre-commit**: Auto-formats staged `.ts` files with Prettier and ESLint
+
+Contributing:
 
 - Fork the repository and create feature branches
 - Test with multiple compaction types before submitting PRs
-- Follow TypeScript strict mode and [MCP protocol](https://modelcontextprotocol.io/specification)
+- Follow TypeScript strict mode and [MCP protocol](https://modelcontextprotocol.io/specification) standards
+
+Learn from examples:
+
+- [Official MCP servers](https://github.com/modelcontextprotocol/servers) for reference implementations
+- [TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk) for best practices
+- [Creating Node.js modules](https://docs.npmjs.com/creating-node-js-modules) for npm package development
 
 ## license
 
 [MIT](LICENSE)
 
----
+<hr>
 
-![Emperor Claudius](https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Claudius_crop.jpg/500px-Claudius_crop.jpg)
+<a href="https://en.wikipedia.org/wiki/A_Roman_Emperor_AD_41"><img src="logo/praetorian-guard.jpg" alt="A Roman Emperor AD 41 — Lawrence Alma-Tadema" width="100%"></a>
 
-_Tiberius Claudius Caesar Augustus Germanicus - Declared emperor by his Praetorian Guard_
+_**[A Roman Emperor AD 41](https://en.wikipedia.org/wiki/A_Roman_Emperor_AD_41)** by **[Lawrence Alma-Tadema](https://en.wikipedia.org/wiki/Lawrence_Alma-Tadema)** (1871). [Gratus](https://en.wikipedia.org/wiki/Praetorian_Guard) of the [Praetorian Guard](https://en.wikipedia.org/wiki/Praetorian_Guard) discovers [Claudius](https://en.wikipedia.org/wiki/Claudius) hiding behind a curtain and [declares him emperor](https://en.wikipedia.org/wiki/Claudius#Accession). [Walters Art Museum](https://art.thewalters.org/detail/637/a-roman-emperor-41-ad/), public domain._

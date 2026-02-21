@@ -1,11 +1,8 @@
-import { promises as fs } from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-import { encode, decode } from "@toon-format/toon";
-import { CompactionSchema, SearchIndexSchema, CompactInputSchema } from "../schemas.js";
-import type { Compaction, CompactInput, SearchIndex } from "../types.js";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+import { promises as fs } from 'fs';
+import path from 'path';
+import { encode, decode } from '@toon-format/toon';
+import { CompactionSchema, SearchIndexSchema, CompactInputSchema } from '../schemas.js';
+import type { Compaction, CompactInput, SearchIndex } from '../types.js';
 
 export class Storage {
   private baseDir: string;
@@ -14,9 +11,9 @@ export class Storage {
 
   constructor(projectRoot?: string) {
     // Use project root or current working directory
-    this.baseDir = path.join(projectRoot || process.cwd(), ".claude", "praetorian");
-    this.compactionsDir = path.join(this.baseDir, "compactions");
-    this.indexPath = path.join(this.baseDir, "index.json");
+    this.baseDir = path.join(projectRoot || process.cwd(), '.claude', 'praetorian');
+    this.compactionsDir = path.join(this.baseDir, 'compactions');
+    this.indexPath = path.join(this.baseDir, 'index.json');
   }
 
   async init(): Promise<void> {
@@ -41,7 +38,7 @@ export class Storage {
   private tokenize(text: string): string[] {
     return text
       .toLowerCase()
-      .replace(/[^a-z0-9\s]/g, " ")
+      .replace(/[^a-z0-9\s]/g, ' ')
       .split(/\s+/)
       .filter((word) => word.length > 2);
   }
@@ -72,16 +69,13 @@ export class Storage {
     return null;
   }
 
-  private mergeCompaction(
-    existing: Compaction,
-    input: CompactInput
-  ): Compaction {
+  private mergeCompaction(existing: Compaction, input: CompactInput): Compaction {
     const merged: Compaction = { ...existing, updated: new Date().toISOString() };
 
     // Merge arrays - append unique items (handle null from TOON format)
     const mergeArrays = (
       existingArr?: string[] | null,
-      newArr?: string[] | null
+      newArr?: string[] | null,
     ): string[] | null | undefined => {
       if (!newArr) return existingArr;
       if (!existingArr) return newArr;
@@ -116,7 +110,7 @@ export class Storage {
 
   async compact(input: CompactInput): Promise<{
     id: string;
-    action: "created" | "merged";
+    action: 'created' | 'merged';
     merged_with?: string;
   }> {
     await this.init();
@@ -136,7 +130,7 @@ export class Storage {
 
       return {
         id: similarId,
-        action: "merged",
+        action: 'merged',
         merged_with: similarId,
       };
     } else {
@@ -155,7 +149,7 @@ export class Storage {
 
       return {
         id,
-        action: "created",
+        action: 'created',
       };
     }
   }
@@ -163,12 +157,12 @@ export class Storage {
   private async save(compaction: Compaction): Promise<void> {
     const filePath = path.join(this.compactionsDir, `${compaction.id}.toon`);
     const toonContent = encode(compaction);
-    await fs.writeFile(filePath, toonContent, "utf-8");
+    await fs.writeFile(filePath, toonContent, 'utf-8');
   }
 
   async load(id: string): Promise<Compaction> {
     const filePath = path.join(this.compactionsDir, `${id}.toon`);
-    const content = await fs.readFile(filePath, "utf-8");
+    const content = await fs.readFile(filePath, 'utf-8');
     const decoded = decode(content);
 
     // Runtime validation with Zod
@@ -177,8 +171,8 @@ export class Storage {
   }
 
   private async loadIndex(): Promise<SearchIndex> {
-    const content = await fs.readFile(this.indexPath, "utf-8");
-    const parsed = JSON.parse(content);
+    const content = await fs.readFile(this.indexPath, 'utf-8');
+    const parsed: unknown = JSON.parse(content);
 
     // Runtime validation with Zod
     const validated = SearchIndexSchema.parse(parsed);
@@ -203,15 +197,15 @@ export class Storage {
 
     // Update word index - include all searchable fields
     const techniquesText = compaction.techniques
-      ? Object.entries(compaction.techniques).flat().join(" ")
-      : "";
+      ? Object.entries(compaction.techniques).flat().join(' ')
+      : '';
     const decisionsText = compaction.decisions
-      ? compaction.decisions.map((d) => `${d.chose} ${d.reason}`).join(" ")
-      : "";
+      ? compaction.decisions.map((d) => `${d.chose} ${d.reason}`).join(' ')
+      : '';
 
     const text = [
       compaction.title,
-      compaction.source || "",
+      compaction.source || '',
       ...(compaction.key_insights || []),
       ...(compaction.findings || []),
       ...(compaction.refs || []),
@@ -220,7 +214,7 @@ export class Storage {
       ...(compaction.next || []),
       techniquesText,
       decisionsText,
-    ].join(" ");
+    ].join(' ');
 
     const words = this.tokenize(text);
     for (const word of words) {
@@ -238,7 +232,7 @@ export class Storage {
   async search(
     query: string,
     type?: string,
-    limit: number = 3
+    limit: number = 3,
   ): Promise<Array<Compaction & { relevance: number }>> {
     const index = await this.loadIndex();
     const words = this.tokenize(query);
@@ -256,9 +250,7 @@ export class Storage {
     // Filter by type if specified
     let candidates = Object.entries(scores);
     if (type) {
-      candidates = candidates.filter(
-        ([id]) => index.compactions[id]?.type === type
-      );
+      candidates = candidates.filter(([id]) => index.compactions[id]?.type === type);
     }
 
     // Sort by score and take top results
@@ -274,16 +266,13 @@ export class Storage {
           ...compaction,
           relevance: scores[id] / maxScore,
         };
-      })
+      }),
     );
 
     return results;
   }
 
-  async getRecent(
-    type?: string,
-    limit: number = 3
-  ): Promise<Compaction[]> {
+  async getRecent(type?: string, limit: number = 3): Promise<Compaction[]> {
     const index = await this.loadIndex();
 
     let compactions = Object.values(index.compactions);
@@ -292,9 +281,7 @@ export class Storage {
     }
 
     // Sort by updated date (most recent first)
-    compactions.sort(
-      (a, b) => new Date(b.updated).getTime() - new Date(a.updated).getTime()
-    );
+    compactions.sort((a, b) => new Date(b.updated).getTime() - new Date(a.updated).getTime());
 
     const topIds = compactions.slice(0, limit).map((c) => c.id);
     return Promise.all(topIds.map((id) => this.load(id)));

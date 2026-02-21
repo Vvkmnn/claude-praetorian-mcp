@@ -1,10 +1,10 @@
 export type CompactionType =
-  | "web_research"
-  | "task_result"
-  | "flow_analysis"
-  | "decisions"
-  | "conversation"
-  | "file_reads";
+  | 'web_research'
+  | 'task_result'
+  | 'flow_analysis'
+  | 'decisions'
+  | 'conversation'
+  | 'file_reads';
 
 export interface Decision {
   chose: string;
@@ -13,7 +13,7 @@ export interface Decision {
 }
 
 export interface Path {
-  status: "working" | "broken" | "unknown";
+  status: 'working' | 'broken' | 'unknown';
   trace: string[];
 }
 
@@ -56,7 +56,7 @@ export interface CompactInput {
 
 export interface CompactOutput {
   id: string;
-  action: "created" | "merged";
+  action: 'created' | 'merged';
   merged_with?: string;
   tokens_saved: number;
 }
@@ -74,11 +74,14 @@ export interface RestoreOutput {
 
 export interface SearchIndex {
   words: Record<string, string[]>; // word -> compaction IDs
-  compactions: Record<string, {
-    id: string;
-    type: CompactionType;
-    title: string;
-    created: string;
-    updated: string;
-  }>;
+  compactions: Record<
+    string,
+    {
+      id: string;
+      type: CompactionType;
+      title: string;
+      created: string;
+      updated: string;
+    }
+  >;
 }

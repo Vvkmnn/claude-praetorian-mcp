@@ -1,16 +1,16 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 /**
  * Zod schemas for runtime validation of compaction data
  */
 
 export const CompactionTypeSchema = z.enum([
-  "web_research",
-  "task_result",
-  "flow_analysis",
-  "decisions",
-  "conversation",
-  "file_reads",
+  'web_research',
+  'task_result',
+  'flow_analysis',
+  'decisions',
+  'conversation',
+  'file_reads',
 ]);
 
 export const DecisionSchema = z.object({
@@ -20,7 +20,7 @@ export const DecisionSchema = z.object({
 });
 
 export const PathSchema = z.object({
-  status: z.enum(["working", "broken", "unknown"]),
+  status: z.enum(['working', 'broken', 'unknown']),
   trace: z.array(z.string()),
 });
 
@@ -71,6 +71,6 @@ export const SearchIndexSchema = z.object({
       title: z.string(),
       created: z.string(),
       updated: z.string(),
-    })
+    }),
   ),
 });

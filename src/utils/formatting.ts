@@ -6,18 +6,14 @@
  * @param width - Total width of the box (default: 70)
  * @returns Formatted bordered box as a string
  */
-export function formatBorderedBox(
-  content: string[],
-  status: string,
-  width: number = 70
-): string {
+export function formatBorderedBox(content: string[], status: string, width: number = 70): string {
   const lines: string[] = [];
 
   // Top border: ┌─ ⚜️  ─────... [Status] ─┐
-  const topLeft = "┌─ ⚜️  ";
+  const topLeft = '┌─ ⚜️  ';
   const topRight = ` ${status} ─┐`;
   const dashCount = width - topLeft.length - topRight.length;
-  const topBorder = topLeft + "─".repeat(Math.max(0, dashCount)) + topRight;
+  const topBorder = topLeft + '─'.repeat(Math.max(0, dashCount)) + topRight;
   lines.push(topBorder);
 
   // Content lines: │ [content]
@@ -26,8 +22,8 @@ export function formatBorderedBox(
   }
 
   // Bottom border: └─────...─┘
-  const bottomBorder = "└" + "─".repeat(width - 2) + "┘";
+  const bottomBorder = '└' + '─'.repeat(width - 2) + '┘';
   lines.push(bottomBorder);
 
-  return lines.join("\n");
+  return lines.join('\n');
 }
