@@ -2,7 +2,7 @@
 
 # claude-praetorian-mcp
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server for aggressive context compaction in [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Save 90%+ tokens by compacting web research, task outputs, and conversations into structured snapshots.
+An [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server for aggressive context compaction in [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Save 90%+ tokens by compacting web research, task outputs, and conversations into structured snapshots.
 
 <br clear="right">
 
@@ -39,7 +39,7 @@ Install this mcp: https://github.com/Vvkmnn/claude-praetorian-mcp
 ```json
 {
   "mcpServers": {
-    "praetorian": {
+    "claude-praetorian-mcp": {
       "command": "npx",
       "args": ["claude-praetorian-mcp"],
       "env": {}
@@ -48,15 +48,15 @@ Install this mcp: https://github.com/Vvkmnn/claude-praetorian-mcp
 }
 ```
 
-That's it; there is **no `npm install` required** as there are no external databases or services, only flat files.
+There is **no `npm install` required** -- no external databases or services, only flat files.
 
-However, in the unlikely event that you pull the wrong package / `npx` registry is out of date, you can force resolution with:
+However, if `npx` resolves the wrong package, you can force resolution with:
 
 ```bash
 npm install -g claude-praetorian-mcp
 ```
 
-## skill
+## [skill](.claude/skills/claude-praetorian)
 
 Optionally, install the skill to teach Claude when to proactively use praetorian:
 
@@ -67,7 +67,7 @@ npx skills add Vvkmnn/claude-praetorian-mcp --skill claude-praetorian --global
 
 This makes Claude automatically compact after research, subagent tasks, and before context resets. The MCP works without the skill, but the skill improves discoverability.
 
-## plugin
+## [plugin](https://github.com/Vvkmnn/claude-emporium)
 
 For full automation with hooks, install from the [claude-emporium](https://github.com/Vvkmnn/claude-emporium) marketplace:
 
@@ -296,12 +296,18 @@ How [claude-praetorian-mcp](https://github.com/Vvkmnn/claude-praetorian-mcp) [wo
 - [Inverted index](https://en.wikipedia.org/wiki/Inverted_index): Fast keyword search without vector embeddings
 - [Smart merging](https://github.com/Vvkmnn/claude-praetorian-mcp/blob/master/src/storage/index.ts#L74): Combine similar compactions without duplication
 
+**Design principles:**
+
+- **Incremental** -- merge similar compactions via Jaccard similarity, don't replace
+- **Token-minimal** -- TOON format for 30-60% fewer tokens than YAML/JSON
+- **Project-scoped** -- each project stores in its own `.claude/praetorian/`
+- **Flat files only** -- no databases, no external services
+- **Offline** -- never leaves your machine, no network calls
+
 **File access:**
 
 - Stores in: `<project>/.claude/praetorian/`
-- TOON format: `.toon` files (40% fewer bytes than YAML/XML)
-- Zero database dependencies (flat files only, no external services)
-- Never leaves your machine
+- Format: `.toon` files (encoded compactions) + `index.json` (word index + metadata)
 
 ## development
 
@@ -315,7 +321,7 @@ npm test
 
 - **Node.js**: >=20.0.0 (ES modules)
 - **Runtime**: `@modelcontextprotocol/sdk`, `@toon-format/toon`, `zod`
-- **Zero external databases** — works with `npx`
+- **Zero external databases** -- works with `npx`
 
 **Development workflow:**
 
@@ -354,6 +360,10 @@ Learn from examples:
 
 <hr>
 
-<a href="https://en.wikipedia.org/wiki/A_Roman_Emperor_AD_41"><img src="logo/praetorian-guard.jpg" alt="A Roman Emperor AD 41 — Lawrence Alma-Tadema" width="100%"></a>
+<a href="https://en.wikipedia.org/wiki/A_Roman_Emperor_AD_41"><img src="logo/praetorian-guard.jpg" alt="A Roman Emperor AD 41 -- Lawrence Alma-Tadema" width="100%"></a>
+
+<p align="center">
 
 _**[A Roman Emperor AD 41](https://en.wikipedia.org/wiki/A_Roman_Emperor_AD_41)** by **[Lawrence Alma-Tadema](https://en.wikipedia.org/wiki/Lawrence_Alma-Tadema)** (1871). [Gratus](https://en.wikipedia.org/wiki/Praetorian_Guard) of the [Praetorian Guard](https://en.wikipedia.org/wiki/Praetorian_Guard) discovers [Claudius](https://en.wikipedia.org/wiki/Claudius) hiding behind a curtain and [declares him emperor](https://en.wikipedia.org/wiki/Claudius#Accession). [Walters Art Museum](https://art.thewalters.org/detail/637/a-roman-emperor-41-ad/), public domain._
+
+</p>
